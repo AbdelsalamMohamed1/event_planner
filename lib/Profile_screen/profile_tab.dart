@@ -5,18 +5,17 @@ import 'package:event_plannig/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
-class SettingsScreen extends StatefulWidget {
+class ProfileTab extends StatefulWidget {
   static String routeName = 'settingScreen';
 
   @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
+  State<ProfileTab> createState() => _ProfileTabState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
-  bool lightTheme = true;
+class _ProfileTabState extends State<ProfileTab> {
 
-  bool arabic = true;
 
   @override
   Widget build(BuildContext context) {
@@ -49,11 +48,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           InkWell(
                               onTap: () {
                                 setState(() {
-                                  arabic = true;
                                   languageProvider.changeLanguage('ar');
                                 });
                               },
-                              child: (arabic)
+                              child: (languageProvider.language=='ar')
                                   ? Row(
                                       children: [
                                         Text(
@@ -82,10 +80,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                           InkWell(
                               onTap: () {
-                                arabic = false;
+
                                 languageProvider.changeLanguage('en');
                               },
-                              child: (!arabic)
+                              child: (languageProvider.language=='en')
                                   ? Row(
                                       children: [
                                         Text(
@@ -120,11 +118,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(color: MyAppColors.primary)),
                 padding: EdgeInsets.all(16),
-                child: Row(
+                child: (languageProvider.language=='ar')?Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                  (arabic)?AppLocalizations.of(context)!.arabic:AppLocalizations.of(context)!.english,
+                      AppLocalizations.of(context)!.arabic,
+                      style: themeProvider.theme.textTheme.titleSmall,
+                    ),
+                    Icon(
+                      Icons.arrow_drop_down,
+                      color: MyAppColors.primary,
+                      size: 35,
+                    ),
+                  ],
+                ):Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      AppLocalizations.of(context)!.english,
                       style: themeProvider.theme.textTheme.titleSmall,
                     ),
                     Icon(
@@ -159,11 +170,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           InkWell(
                             onTap: () {
                               setState(() {
-                                lightTheme=true;
+
                                 themeProvider.changeTheme(MyThemeData.lightTheme);
                               });
                             },
-                            child: (lightTheme)
+                            child: (themeProvider.theme==MyThemeData.lightTheme)
                                 ? Row(
                               children: [
                                 Text(
@@ -193,10 +204,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                           InkWell(
                             onTap: () {
-                              lightTheme=false;
+
                               themeProvider.changeTheme(MyThemeData.darkTheme);
                             },
-                            child: (!lightTheme)
+                            child: (themeProvider.theme==MyThemeData.darkTheme)
                                 ? Row(
                               children: [
                                 Text(
@@ -232,11 +243,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(color: MyAppColors.primary)),
                 padding: EdgeInsets.all(16),
-                child: Row(
+                child: (themeProvider.theme==MyThemeData.lightTheme)?Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       AppLocalizations.of(context)!.light,
+                      style: MyThemeData.lightTheme.textTheme.titleSmall,
+                    ),
+                    Icon(
+                      Icons.arrow_drop_down,
+                      color: MyAppColors.primary,
+                      size: 35,
+                    ),
+                  ],
+                ):
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      AppLocalizations.of(context)!.dark,
                       style: MyThemeData.lightTheme.textTheme.titleSmall,
                     ),
                     Icon(
@@ -253,4 +278,5 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
     );
   }
+
 }

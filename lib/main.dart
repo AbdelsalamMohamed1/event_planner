@@ -1,6 +1,6 @@
 import 'package:event_plannig/providers/language_provider.dart';
 import 'package:event_plannig/providers/theme_provider.dart';
-import 'package:event_plannig/settings_screen.dart';
+import 'package:event_plannig/Profile_screen/profile_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -18,9 +18,9 @@ class MyApp extends StatelessWidget {
     var languageProvider = Provider.of<LanguageProvider>(context);
     var themeProvider = Provider.of<ThemeProvider>(context);
     return MaterialApp(
-      initialRoute: SettingsScreen.routeName,
+      initialRoute: ProfileTab.routeName,
       routes: {
-        SettingsScreen.routeName: (context) => SettingsScreen(),
+        ProfileTab.routeName: (context) => ProfileTab(),
       },
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
