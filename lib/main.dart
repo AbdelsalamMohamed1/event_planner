@@ -1,9 +1,11 @@
 import 'package:event_plannig/providers/language_provider.dart';
 import 'package:event_plannig/providers/theme_provider.dart';
-import 'package:event_plannig/Profile_screen/profile_tab.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+
+import 'Profile_tab/profile_tab.dart';
 
 void main() {
   runApp(MultiProvider(providers: [
