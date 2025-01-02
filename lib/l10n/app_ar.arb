@@ -5,7 +5,7 @@
 "theme":"النمط",
 "light":"النهاري",
 "dark":"الليلي",
-"setting":"الاعدادات"
+"setting":"الاعدادات",
 "email":"الايميل",
 "name":"الاسم",
 "password":"كلمة المرور",
@@ -16,7 +16,7 @@
 "logout":"تسجيل خروج",
 "re_password":"كلمة المرور مجددا",
 "already_have_account":"لديك حساب بالفعل",
-"search_for_event":"بحث عن حدث".
+"search_for_event":"بحث عن حدث",
 "event":"حدث",
 "create_event":"انشاء حدث",
 "all":"الكل",
@@ -32,7 +32,7 @@
 "title":"العنوان",
 "description":"الوصف",
 "event_time":"وقت الحدث",
-"event_day":"يوم الحدث",
+"event_date":"يوم الحدث",
 "choose_time":"اختر الوقت",
 "choose_date":"اختر اليوم",
 "location":"المكان",
@@ -45,5 +45,8 @@
 "reset_password":"اعادة تعيين كلمة المرور",
 "update_event":"تحديث الحدث",
 "edit_event":"تعديل الحدث",
-"welcome_back":"مرحبا بعودتك"
+"welcome_back":"مرحبا بعودتك",
+"create_Account":"انشاء حساب",
+"or":"او",
+"register":"تسجيل بيانات"
 }

@@ -16,7 +16,7 @@
 "logout":"Logout",
 "re_password":"Re password",
 "already_have_account":"Already Have Account",
-"search_for_event":"Search for Event".
+"search_for_event":"Search for Event",
 "event":"Event",
 "create_event":"Create Event",
 "all":"All",
@@ -32,7 +32,7 @@
 "title":"Title",
 "description":"Description",
 "event_time":"Event Time",
-"event_day":"Event Day",
+"event_date":"Event Date",
 "choose_time":"Choose Time",
 "choose_date":"Choose Day",
 "location":"Location",
@@ -45,5 +45,8 @@
 "reset_password":"Reset Password",
 "update_event":"Update Event",
 "edit_event":"Edit Event",
-"welcome_back":"Welcome Back"
+"welcome_back":"Welcome Back",
+"create_Account":"Create Account",
+"or":"Or",
+"register":"Register"
 }
