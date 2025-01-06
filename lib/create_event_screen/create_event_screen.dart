@@ -1,7 +1,9 @@
 import 'package:event_plannig/event_model.dart';
+import 'package:event_plannig/firebase%20utils/fire_base_utils.dart';
 import 'package:event_plannig/my_theme_data.dart';
 import 'package:event_plannig/my_widget/custom_elevated_button.dart';
 import 'package:event_plannig/my_widget/custom_text_form_field.dart';
+import 'package:event_plannig/providers/event_list_provider.dart';
 import 'package:event_plannig/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -21,19 +23,18 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   int currentTab = 0;
   var formKey = GlobalKey<FormState>();
   DateTime? date;
-  String imagePath='';
-  String eventTpye='';
-  String title='';
-  String decs='';
+  int image = 0;
+  String eventType = '';
+  String title = '';
+  String desc = '';
   TimeOfDay? time;
 
   @override
   Widget build(BuildContext context) {
-    var screen = MediaQuery
-        .of(context)
-        .size;
+    var screen = MediaQuery.of(context).size;
     var themeProvider = Provider.of<ThemeProvider>(context);
     bool isLightTheme = (themeProvider.theme == MyThemeData.lightTheme);
+    var eventListProvider=Provider.of<EventListProvider>(context);
     List<String> tabsNames = [
       AppLocalizations.of(context)!.birthday,
       AppLocalizations.of(context)!.book_club,
@@ -64,7 +65,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
             children: [
               Container(
                 decoration:
-                BoxDecoration(borderRadius: BorderRadius.circular(16)),
+                    BoxDecoration(borderRadius: BorderRadius.circular(16)),
                 clipBehavior: Clip.hardEdge,
                 child: Image(
                     image: AssetImage((isLightTheme)
@@ -80,12 +81,8 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       onTap: () {
                         setState(() {
                           currentTab = index;
-                          eventTpye= tabsNames[index];
-                          if(isLightTheme){
-                            imagePath=EventModel.lightThemeImages[currentTab];
-                          }else{
-                            imagePath=EventModel.darkThemeImages[currentTab];
-                          }
+                          eventType = tabsNames[index];
+                          image = currentTab;
                         });
                       },
                       child: CategoryTab(
@@ -126,8 +123,8 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                           AssetImage('assets/images/ic_edit.png'),
                           color: MyAppColors.gray,
                         ),
-                        onChanged: (text){
-                          title=text;
+                        onChanged: (text) {
+                          title = text;
                         },
                       ),
                       SizedBox(
@@ -148,8 +145,8 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                           }
                           return null;
                         },
-                        onChanged: (text){
-                          decs=text;
+                        onChanged: (text) {
+                          desc = text;
                         },
                       ),
                       SizedBox(
@@ -162,35 +159,38 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                             children: [
                               ImageIcon(
                                 AssetImage('assets/images/ic_date.png'),
-                                color: (isLightTheme)?MyAppColors.black:MyAppColors.white,
+                                color: (isLightTheme)
+                                    ? MyAppColors.black
+                                    : MyAppColors.white,
                               ),
                               SizedBox(
                                 width: screen.width * .02,
                               ),
                               Text(
                                 AppLocalizations.of(context)!.event_date,
-                                style: themeProvider.theme.textTheme
-                                    .displayMedium,
+                                style:
+                                    themeProvider.theme.textTheme.displayMedium,
                               )
                             ],
                           ),
                           InkWell(
                             onTap: () async {
-                              var chosenDate=await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime.now(),
-                                  lastDate: DateTime.now().add(Duration(days: 365)),
-
+                              var chosenDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime.now(),
+                                lastDate:
+                                    DateTime.now().add(Duration(days: 365)),
                               );
-                              if(chosenDate!=null){
-                                date=chosenDate;
+                              if (chosenDate != null) {
+                                date = chosenDate;
                               }
                               setState(() {});
                             },
-                            child: Text((date==null)?
-                              AppLocalizations.of(context)!.choose_date:
-                              "${date!.day}/${date!.month}/${date!.year}",
+                            child: Text(
+                              (date == null)
+                                  ? AppLocalizations.of(context)!.choose_date
+                                  : "${date!.day}/${date!.month}/${date!.year}",
                               style: themeProvider.theme.textTheme.displaySmall,
                             ),
                           )
@@ -206,34 +206,35 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                             children: [
                               ImageIcon(
                                 AssetImage('assets/images/ic_time.png'),
-                                color: (isLightTheme)?MyAppColors.black:MyAppColors.white,
+                                color: (isLightTheme)
+                                    ? MyAppColors.black
+                                    : MyAppColors.white,
                               ),
                               SizedBox(
                                 width: screen.width * .02,
                               ),
                               Text(
                                 AppLocalizations.of(context)!.event_time,
-                                style: themeProvider.theme.textTheme
-                                    .displayMedium,
+                                style:
+                                    themeProvider.theme.textTheme.displayMedium,
                               )
                             ],
                           ),
                           InkWell(
                             onTap: () async {
-                              var chosenTime= await showTimePicker(
-                                  context: context,
-                                  initialTime:TimeOfDay.now(),
-
+                              var chosenTime = await showTimePicker(
+                                context: context,
+                                initialTime: TimeOfDay.now(),
                               );
-                              if(chosenTime!=null){
-                                time=chosenTime;
+                              if (chosenTime != null) {
+                                time = chosenTime;
                               }
                               setState(() {});
                             },
-                            child: Text((time==null)?
-                              AppLocalizations.of(context)!.choose_time:
-                                '${time!.format(context)}'
-                              ,
+                            child: Text(
+                              (time == null)
+                                  ? AppLocalizations.of(context)!.choose_time
+                                  : '${time!.format(context)}',
                               style: themeProvider.theme.textTheme.displaySmall,
                             ),
                           )
@@ -273,8 +274,8 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                               ),
                               Text(
                                 'Cairo , Egypt',
-                                style: themeProvider.theme.textTheme
-                                    .displaySmall,
+                                style:
+                                    themeProvider.theme.textTheme.displaySmall,
                               ),
                               Spacer(),
                               Icon(
@@ -293,8 +294,20 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                       ),
                       CustomElevatedButton(
                         onClick: () {
-                          if (formKey.currentState?.validate() == true) {
-
+                          if (formKey.currentState?.validate() == true &&
+                              date != null &&
+                              time != null) {
+                            FireBaseUtils.addEventToFireStore(EventModel(
+                                    title: title,
+                                    desc: desc,
+                                    type: eventType,
+                                    date: date!,
+                                    time: time!.format(context),
+                                    image: image))
+                                .timeout(Duration(milliseconds: 500),onTimeout: () {
+                                  eventListProvider.getAllEvents(onClick: (){});
+                                  Navigator.pop(context);
+                                },);
                           }
                         },
                         text: AppLocalizations.of(context)!.add_event,

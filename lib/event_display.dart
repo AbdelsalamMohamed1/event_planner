@@ -1,29 +1,29 @@
+import 'package:event_plannig/event_model.dart';
 import 'package:event_plannig/my_app_colors.dart';
 import 'package:event_plannig/my_theme_data.dart';
 import 'package:event_plannig/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class EventDisplay extends StatelessWidget {
-  AssetImage assetImage;
-  String date;
-  String desc;
-  bool isFavorite;
+  EventModel eventModel;
+  Function onFavoriteClick;
 
-  EventDisplay(
-      {required this.assetImage,
-      required this.date,
-      required this.desc,
-      required this.isFavorite});
+  EventDisplay({required this.eventModel, required this.onFavoriteClick});
 
   @override
   Widget build(BuildContext context) {
+    String date=DateFormat('MMM').format(eventModel.date);
     var themeProvider = Provider.of<ThemeProvider>(context);
     bool isLightTheme = (themeProvider.theme == MyThemeData.lightTheme);
     var screen = MediaQuery.of(context).size;
     return Container(
       decoration: BoxDecoration(
-        image: DecorationImage(image: assetImage),
+        image: DecorationImage(
+            image: AssetImage((isLightTheme)
+                ? EventModel.lightThemeImages[eventModel.image]
+                : EventModel.darkThemeImages[eventModel.image])),
         border: Border.all(color: MyAppColors.primary),
         borderRadius: BorderRadius.circular(16),
       ),
@@ -44,11 +44,11 @@ class EventDisplay extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  date,
+                  eventModel.date.day.toString(),
                   style: themeProvider.theme.textTheme.titleSmall,
                 ),
                 Text(
-                  "Nov",
+                  date,
                   style: themeProvider.theme.textTheme.displaySmall,
                 )
               ],
@@ -65,15 +65,21 @@ class EventDisplay extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  desc,
+                  eventModel.desc,
                   style: themeProvider.theme.textTheme.displayMedium,
                 ),
-                ImageIcon(
-                  (isFavorite)
-                      ? AssetImage("assets/images/ic_selected_favorite.png")
-                      : AssetImage("assets/images/ic_unselected_favorite.png"),
-                  size: 35,
-                  color: MyAppColors.primary,
+                InkWell(
+                  onTap: () {
+                    onFavoriteClick();
+                  },
+                  child: ImageIcon(
+                    (eventModel.isFavorite)
+                        ? AssetImage("assets/images/ic_selected_favorite.png")
+                        : AssetImage(
+                            "assets/images/ic_unselected_favorite.png"),
+                    size: 35,
+                    color: MyAppColors.primary,
+                  ),
                 )
               ],
             ),

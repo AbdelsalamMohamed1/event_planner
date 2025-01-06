@@ -1,8 +1,10 @@
 import 'package:event_plannig/category_tab.dart';
 import 'package:event_plannig/event_display.dart';
 import 'package:event_plannig/event_model.dart';
+import 'package:event_plannig/firebase%20utils/fire_base_utils.dart';
 import 'package:event_plannig/my_app_colors.dart';
 import 'package:event_plannig/my_theme_data.dart';
+import 'package:event_plannig/providers/event_list_provider.dart';
 import 'package:event_plannig/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -33,8 +35,18 @@ class _HomeTabState extends State<HomeTab> {
     var screen = MediaQuery
         .of(context)
         .size;
+    var eventListProvider=Provider.of<EventListProvider>(context);
     var themeProvider = Provider.of<ThemeProvider>(context);
     bool isLightTheme = (themeProvider.theme == MyThemeData.lightTheme);
+        if(currentTab>0){eventListProvider.getAllEventsFiltered(
+            onClick:(){setState(() {});},
+          search: tabsNames[currentTab]
+        );}
+        else{
+          eventListProvider.getAllEvents(
+              onClick:(){setState(() {});},
+          );
+        }
     return SafeArea(
         child: Column(
           children: [
@@ -96,7 +108,9 @@ class _HomeTabState extends State<HomeTab> {
                                 .headlineLarge!,
                             isSelected: (currentTab == index),
                             title: tabsNames[index],
-                            backgroundColor: (isLightTheme)?MyAppColors.white:MyAppColors.primary,
+                            backgroundColor: (isLightTheme)
+                                ? MyAppColors.white
+                                : MyAppColors.primary,
                           ),
                         );
                       },
@@ -109,21 +123,21 @@ class _HomeTabState extends State<HomeTab> {
               ),
             ),
             Expanded(
-              child: ListView.builder(itemBuilder: (context, index) {
+              child:(eventListProvider.eventList.isNotEmpty)? ListView.builder(itemBuilder: (context, index) {
                 return EventDisplay(
-                    assetImage:(isLightTheme)
-                        ? AssetImage(EventModel.lightThemeImages[0])
-                        : AssetImage(EventModel.darkThemeImages[0]),
-                    date: '$index',
-                    desc: 'heeelllooooo',
-                    isFavorite: false);
+                    onFavoriteClick:(){
+                      FireBaseUtils.changeFavorite(eventListProvider.eventList[index]);
+                      setState(() {});
+                    },
+                    eventModel: eventListProvider.eventList[index],);
               },
-                itemCount: 2,
+                itemCount: eventListProvider.eventList.length,
                 scrollDirection: Axis.vertical,
-              ),
+              ):Center(child: CircularProgressIndicator()),
             )
           ],
         )
     );
   }
+
 }

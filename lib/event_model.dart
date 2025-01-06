@@ -1,18 +1,35 @@
 import 'package:flutter/material.dart';
 
 class EventModel {
+  static const String collectionName='collection';
   String title;
-  String decs;
-  bool isfavorite;
-  String date;
+  String desc;
+  String type;
+  bool isFavorite;
+  DateTime date;
   String time;
+  int image;
+  String id;
 
   EventModel(
-      {required this.title,
-      required this.decs,
+      {this.id = '',
+      required this.title,
+      required this.desc,
+      required this.type,
       required this.date,
-      required this.isfavorite,
-      required this.time});
+      this.isFavorite = false,
+      required this.time,
+      required this.image});
+  EventModel.fromFireStore(Map<String,dynamic>? data):this(
+    id: data!['id'] as String,
+      type: data['type'] as String,
+      title: data['title'] as String,
+    desc: data['desc'] as String,
+    image: data['image'] as int,
+    date:DateTime.fromMillisecondsSinceEpoch(data['date']) ,
+    time: data['time'] as String,
+    isFavorite: data['favorite'] as bool,
+  );
 
   static List<String> lightThemeImages = [
     'assets/images/light_birthday.png',
@@ -36,4 +53,17 @@ class EventModel {
     'assets/images/dark_sports.png',
     'assets/images/dark_workshop.png',
   ];
+   Map<String,dynamic> toFireStore(){
+    return {
+      'id':id,
+      'title':title,
+      'desc':desc,
+      'type':type,
+      'favorite':isFavorite,
+      'time':time,
+      'date':date.millisecondsSinceEpoch,
+      'image':image,
+    };
+  }
+
 }
