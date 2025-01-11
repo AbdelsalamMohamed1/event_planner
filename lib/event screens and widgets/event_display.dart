@@ -66,6 +66,7 @@ class EventDisplay extends StatelessWidget {
               children: [
                 Text(
                   eventModel.desc,
+                  maxLines: 1,
                   style: themeProvider.theme.textTheme.displayMedium,
                 ),
                 InkWell(
